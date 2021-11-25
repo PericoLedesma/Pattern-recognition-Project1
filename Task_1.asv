@@ -1,0 +1,5 @@
+% Task 1: Pairwise correlation coeﬀicients
+
+
+% F
+z = zeros(24,3);
