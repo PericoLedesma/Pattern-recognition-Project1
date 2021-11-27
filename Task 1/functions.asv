@@ -1,0 +1,16 @@
+% Functions
+
+clear all
+clc
+
+
+
+z = [2 2 2; 2 2 2];
+
+
+solution = average(z)
+
+
+
+
+avg = mean(array);

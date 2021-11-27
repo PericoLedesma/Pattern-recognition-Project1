@@ -1,0 +1,15 @@
+
+
+
+x = [2 2 2 2];
+ 
+
+
+a = ave(x):
+
+ function ave = average(x)
+    ave = sum(x(:))/numel(x); 
+end
+
+display(a);
+

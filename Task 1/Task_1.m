@@ -5,7 +5,7 @@ clc
 % Firts element Height, Second element Age, Third element Weight(kg)
 
 %Load file
-array = importdata('Assignment1-files/Task_1/task_1.mat');
+array = importdata('task_1.mat');
 
 size_array = size(array);
 
@@ -84,8 +84,10 @@ for i = 1: number_columns
 
 
 %  We calculate the mean of the features
- avg = mean(array);
+ %avg = mean(array);
+ avg = function_averague(array);
 
+ 
 %Correlation
 C = cov(array);
 
