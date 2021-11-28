@@ -23,4 +23,4 @@ array = rand(12,4)
 C = cov(array)
  
 
-c = function_covariance(array)
+c = fcovariance(array)

@@ -1,4 +1,4 @@
-function mean_array = average(array);
+function mean_array = faverage(array);
 
     size_array = size(array);
 

@@ -13,23 +13,6 @@ number_rows = size_array(1, 1);
 number_columns = size_array(1, 2);
 
 
-
-% % Correlacion = +-1 for validating the formulas
-% 
-%  array(1, 1) = -1;
-%  array(1, 2) = 1;
-% 
-% for i = 2:number_rows
-%       j = i -1;
-%        
-%       array(i, 1) = array(j, 1) - 1;
-%       array(i, 2) = array(j, 2) + 1 ;
-% end 
-% 
-% %Delete until here
-
-
-
 %Display of all the features (1vs1)
 
 figure;
@@ -83,42 +66,19 @@ for i = 1: number_columns
  end
 
 
-%  We calculate the mean of the features
- %avg = mean(array);
- avg = function_averague(array);
+%Calculation with MATLAB functions
 
- 
-%Correlation
-C = cov(array);
+%  C = corrcoef(array);
 
-correlation = [0; 0; 0];
-
-for i = 1: number_columns
-
-    %Columns 
-    column1 = i;
-    column2 = column1 +1;
-    
-    if column2 > 3
-        column2 = 1;
-    end 
-    
-    a = C(column1, column1)*C(column2, column2);
-    b = C(column1, column2)/sqrtm(a);
-    c = [b; column1; column2];
-    
-    correlation = [correlation c];   
-    
-    %fprintf('The correlation between the column %d and column %d is: %f\n',column1,column2, correlation);
-end 
+%Correlation calculation with homemade functions
    
-
+ correlation_array = fcorrelation(array)
 
 
 %Max value 
   
-correlation = abs(correlation);
-correlation1 = max(correlation(1,:));
+correlation = abs(correlation_array);
+correlation1 = max(correlation_array(1,:));
 
 %Display the two features for which the correlation coeﬀicient is largest
 
@@ -173,20 +133,20 @@ title('Plot A')
 %Second largest correlation 
 
 for i =1:length(correlation)
-    if correlation(1,i)== correlation1
-        correlation(1,i) = 0;
-        i = length(correlation);
+    if correlation_array(1,i)== correlation1
+        correlation_array(1,i) = 0;
+        i = length(correlation_array);
     end 
 end
 
-correlation2 = max(correlation(1,:));
+correlation2 = max(correlation_array(1,:));
 
 %Display the two features for which the correlation coeﬀicient is largest
 
-for i = 1:length(correlation)
-    if correlation(1,i) == correlation2
-        column1 = correlation(2,i);
-        column2 = correlation(3,i);
+for i = 1:length(correlation_array)
+    if correlation_array(1,i) == correlation2
+        column1 = correlation_array(2,i);
+        column2 = correlation_array(3,i);
     end 
 end 
 

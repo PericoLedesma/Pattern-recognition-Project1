@@ -1,4 +1,4 @@
-function covariance = function_covanriance(array);
+function covariance = fcovanriance(array);
 
     size_array = size(array);
 
@@ -12,12 +12,12 @@ function covariance = function_covanriance(array);
     for j = 1:number_columns
 
         column1 = array(:,j);
-        avg1 = mean (column1);
+        avg1 = faverage(column1);
 
         for h = 1:number_columns
 
             column2 = array(:,h);
-            avg2 = mean (column2);
+            avg2 = faverage(column2);
 
             for i = 1:number_rows
                 x = (column1(i) - avg1) * (column2(i) - avg2) + x;
@@ -29,7 +29,7 @@ function covariance = function_covanriance(array);
         end 
     end
 
-    disp(covariance);
+%     disp(covariance);
 
 end
 
