@@ -48,7 +48,7 @@ dataset = [array_lvq_A; array_lvq_B];
 
 % %Pruebas
 
-dataset = [1 1 1;  5 4 2; 2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2];
+dataset = [ 5 4 2; 1 1 1;  2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2];
 
 array_lvq_A = [1 1 ; 2 2; 2 1; 1 2; 3 1; 0 1];
 array_lvq_B = [5 5 ; 7 7; 7 6; 7 5; 5 6];
@@ -61,6 +61,8 @@ number_rows_dataset = size_dataset(1,1);
 
 
 % %Display dataset
+
+figure('Name','Dataset and the prototypes calculation');
 
 feature_x = array_lvq_A(:,1);
 feature_y = array_lvq_A(:,2);
@@ -107,30 +109,36 @@ hold on;
 
 m = 2;
 
-step = 0.1;
+step = 0.01;
 
 row = 3;
 
+E = 50;
+
 % Step 1
 
-cont = 1;
 
-while cont < 10
+
+
+% Array misclassified training examples
+
+epoch = 1;
+
+misclassified = [0 0];
+
+while epoch < 1000
+    
+    E = 0;
     
     for row = 3:number_rows_dataset
         
         Distance_1 = (weight(1,1)- dataset(row,1))^2 + (weight(2,1)- dataset(row,2))^2;
-        
-        
         Distance_2 = (weight(1,2)- dataset(row,1))^2 + (weight(2,2)- dataset(row,2))^2;
-        
-        
         
         if Distance_1 < Distance_2
             if dataset(row,3) == 1
                 
                 weight(1,1) = weight(1,1) + step * (dataset(row,1) - weight(1,1));
-                
                 weight(2,1) = weight(2,1) + step * (dataset(row,2) - weight(2,1));
                 
                 weight_history_1 = [weight_history_1; weight(1,1)  weight(2,1)];
@@ -138,25 +146,17 @@ while cont < 10
             elseif  dataset(row,3) == 2
                 
                 weight(1,1) = weight(1,1) - step * (dataset(row,1) - weight(1,1));
-                
-                
                 weight(2,1) = weight(2,1) - step * (dataset(row,2) - weight(2,1));
-                
                 
                 weight_history_1 = [weight_history_1; weight(1,1)  weight(2,1)];
                 
-            else
-                
-                
+                E = E + 1;
             end
             
         elseif Distance_1 > Distance_2
             if dataset(row,3) == 2
                 
-                
                 weight(1,2) = weight(1,2) + step * (dataset(row,1) - weight(1,2));
-                
-                
                 weight(2,2) = weight(2,2) + step * (dataset(row,2) - weight(2,2));
                 
                 
@@ -164,29 +164,20 @@ while cont < 10
                 
             elseif dataset(row,3) == 1
                 
-                
                 weight(1,2) = weight(1,2) - step * (dataset(row,1) - weight(1,2));
-                
                 weight(2,2) = weight(2,2) - step * (dataset(row,2) - weight(2,2));
                 
                 weight_history_2 = [weight_history_2; weight(1,2)  weight(2,2)];
                 
-            else
-                
+                E = E + 1;
             end
-            
-        else
-            
         end
-        
-        
-        
     end
     
     
+    misclassified = [misclassified; epoch E];
     
-    
-    cont = cont + 1;
+    epoch = epoch + 1;
     
 end
 
@@ -199,7 +190,7 @@ hold on;
 
 feature_x3 = weight_history_2(:,1);
 feature_y3 = weight_history_2(:,2);
-scatter(feature_x3,feature_y3,'o', 'blue');
+scatter(feature_x3,feature_y3,'.', 'blue');
 
 hold on;
 
@@ -222,4 +213,8 @@ scatter(feature_x3,feature_y3,'*', 'magenta');
 
 hold on;
 
+figure('Name','Misclasified points');
+scatter(misclassified(:,1),misclassified(:,2), 10,'*', 'magenta');
+
+hold on;
 
