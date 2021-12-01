@@ -1,5 +1,19 @@
-%In process by Pietro
+%% Task 9: ROC
+clc
+clear all
 
-dataset = [ 5 4 2; 1 1 1;  2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2]
+%% Load of the data provided (structure 200×2 double])
+ 
+data_structure = load('task_9_outcomes.mat')
 
-dataset = dataset(:,[3 2 1])
+%% Parameters:
+
+% Normal distribution 1 parameters
+
+mean_1 = 5;
+variance_1 = 4;
+
+% Normal distribution 2 parameters
+
+mean_2 = 7;
+variance_2 = 4;
