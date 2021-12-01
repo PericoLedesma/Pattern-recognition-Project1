@@ -184,7 +184,7 @@ format long
 disp(weight);
 
 
-%% Display of the history of weights in all the epocchs
+%% Display of the history of weights
 
 feature_x3 = weight_history_1(:,1);
 feature_y3 = weight_history_1(:,2);

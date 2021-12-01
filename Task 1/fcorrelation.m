@@ -1,5 +1,6 @@
 function correlation_array = fcorrelation(array);
 
+%Correlation function homemade
 
 %C = cov(array);
 C = fcovariance(array);
@@ -9,7 +10,7 @@ correlation_array = [0; 0; 0];
 size_array = size(array);
 number_rows = size_array(1, 1);
 number_columns = size_array(1, 2);
- 
+
 
 for i = 1: number_columns
     

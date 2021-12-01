@@ -76,15 +76,14 @@ for i = 1: number_columns
 
 %Correlation calculation with homemade functions
    
- correlation_array = fcorrelation(array);
+ correlation_array = fcorrelation(array)
 
-%Max value of correlation obtained
+%Max value of corre obtained
   
 correlation = abs(correlation_array);
 correlation1 = max(correlation_array(1,:));
 
-
-%%%%%% Display the two features for which the correlation coeﬀicient is largest
+%Display the two features for which the correlation coeﬀicient is largest
 
 for i = 1:length(correlation)
     if correlation(1,i) == correlation1
@@ -92,6 +91,8 @@ for i = 1:length(correlation)
         column2 = correlation(3,i);
     end 
 end 
+
+
 
 %Title of column
 if column1 == 1
@@ -116,13 +117,11 @@ end
 
 fprintf('The two features for which the correlation coeﬀicient is largest are the feature %s(column %d) and the feature %s(column %d).\nThe coeficient is %f\n', column_name1,column1, column_name2,column2,  correlation1);
 
-
 %Display of the plot A --> Max correlation
 
+
 %Plot graph
-
-figure('Name','Solution, display of the features with largest correlation');
-
+figure;
 subplot(2,1,1);
 scatter(array(:,column1), array(:,column2),'x', 'red', 'LineWidth',2);
 xlim([(min(array(:,column1)) - 1) (max(array(:,column1)) + 1)])
@@ -134,7 +133,7 @@ ylabel(column_name2)
 title('Plot A')
 
 
-%Lets find the second largest correlation.
+%Second largest correlation 
 
 for i =1:length(correlation)
     if correlation_array(1,i)== correlation1
@@ -144,6 +143,8 @@ for i =1:length(correlation)
 end
 
 correlation2 = max(correlation_array(1,:));
+
+%Display the two features for which the correlation coeﬀicient is largest
 
 for i = 1:length(correlation_array)
     if correlation_array(1,i) == correlation2

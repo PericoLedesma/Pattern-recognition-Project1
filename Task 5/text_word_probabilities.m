@@ -1,16 +1,16 @@
-%Function to create a structure where each word has his probabilities
+%% Function to create a structure where each word has his probabilities
 
-function structure = text_word_probabilities(email, probabilities);
+function structure = text_word_probabilities(email_text, probabilities);
 
 
 
-for i =1:length(email)
+for i =1:length(email_text)
     
-    structure.word(i) = email(i);
+    structure.word(i) = email_text(i);
     
     for j = 1:length(probabilities.word)
         
-        if email(i,1) == probabilities.word(j);
+        if structure.word(i) == probabilities.word(j);
             
             structure.spam(i) = probabilities.spam(j);
             structure.nospam(i) = probabilities.nospam(j);
@@ -22,9 +22,4 @@ for i =1:length(email)
         end
     end
 end
-
-
-
-
-
 end

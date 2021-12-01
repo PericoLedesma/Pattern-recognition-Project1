@@ -1,5 +1,8 @@
 
-function [spam,nospam] = fNaiveBayesian(email_spam,email_nonspam, text_probabilities);
+%% Function to calculate the probability of the email text
+
+function [spam,nospam] = fNaiveBayesian(email_spam_probabilities,email_nonspam_probabilities, text_probabilities);
+
 
 spam = 1;
 nospam = 1;
@@ -14,7 +17,7 @@ for i =1:length(text_probabilities.word)
     end
 end
 
-spam = spam * email_spam;
-nospam = nospam * email_nonspam;
+spam = spam * email_spam_probabilities;
+nospam = nospam * email_nonspam_probabilities;
 
 end
