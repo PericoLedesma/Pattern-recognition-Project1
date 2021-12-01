@@ -10,19 +10,19 @@ array_lvq_A = importdata('data_lvq_A.mat');
 array_lvq_B = importdata('data_lvq_B.mat');
 
 
-% %Display of features of each class/category
-%
-% feature_x = array_lvq_A(:,1);
-% feature_y = array_lvq_A(:,2);
-%
-% scatter(feature_x,feature_y, 'x', 'red')
-%
-% hold on;
-%
-% feature_x2 = array_lvq_B(:,1);
-% feature_y2 = array_lvq_B(:,2);
-%
-% scatter(feature_x2,feature_y2,'o', 'green')
+%Display of features of each class/category
+
+feature_x = array_lvq_A(:,1);
+feature_y = array_lvq_A(:,2);
+
+scatter(feature_x,feature_y, 'x', 'red')
+
+hold on;
+
+feature_x2 = array_lvq_B(:,1);
+feature_y2 = array_lvq_B(:,2);
+
+scatter(feature_x2,feature_y2,'o', 'green')
 
 
 % Creating dataset
