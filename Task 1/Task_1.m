@@ -1,6 +1,7 @@
 % Task 1: Pairwise correlation coeﬀicients
 clear all
 clc
+close all
 
 % Firts element Height, Second element Age, Third element Weight(kg)
 
