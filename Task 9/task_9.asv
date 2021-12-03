@@ -3,27 +3,26 @@ clc
 clear all
 close all
 
-%% Load of the data provided (structure 200×2 double])
+stringf('Task 9: ROC\n');
 
-data_structure = load('task_9_outcomes.mat');
+%% Parameters of the normal distribution section
 
-%% Normal distributions:
+x_criterion = 0; %Here we select the threshold. Use 0 for intersection point 
 
-% Parameters
+mean = [7 10]; % Mean of both normal distributions
 
-x_criterion = 0;
+variance = [4 4]; % Variance of both normal distributions
 
-mean = [2 10];
-variance = [4 4];
-
-
-x1 = -10;
-x2 = 25;
+x1 = -10;  % Lower limit 
+x2 = 30;   % Up limit 
 
 x = [x1:0.1:x2];
 
+%% Introduction section: Normal distributions
 
 % Normal distributions (PDFs)
+
+stringf('Task 9: ROC\n');
 
 pd(1) = makedist('Normal', mean(1),variance(1));
 pd(2) = makedist('Normal', mean(2),variance(2));
@@ -45,7 +44,7 @@ for i =1:length(pdf_normal(1,:))
     intersection_point_x = intersection_point_x + 0.1;
 end
 
-if x_criterion ~= 0
+if x_criterion == 0
     x_criterion = intersection_point_x;
 end
 
@@ -58,7 +57,7 @@ cdf_normal(2,:) = cdf(pd(2),x);
 
 f = figure('Name','Normal distribution provided and Cumulative distribution function');
 
-f.Position = [100 100 800 800];
+f.Position = [0 100 800 800];
 
 subplot(3,1,1);
 
@@ -111,7 +110,7 @@ hold on
 %% Calculation probability
 
 low_point = x_criterion;
-up_point = 1000; % We should use inf number, but for this exercise that we dont need accurate results I just use a big number
+up_point = 100; % We should use inf number, but for this exercise that we dont need accurate results I just use a big number
 
 points = [low_point up_point];
 
@@ -153,16 +152,92 @@ title('Probabilities')
 
 hold on
 
-disp(probability);
+% disp(probability);
 
 
-%% Second part: ROC
+%% First part: ROC
 
-cdf_normal(1,:) 
-
+%ROCK curve
 
 x1 = -10;
 x2 = 25;
 
 x = [x1:0.1:x2];
 
+ROC_array = [0 0];
+x_point = x1;
+
+
+for i =1:length(pdf_normal(1,:))
+    
+   ROC_array = [ROC_array; cdf_normal(1,i) cdf_normal(2,i)];
+       
+end
+
+% Discriminability value 
+
+d = (mean(2) - mean(1))/sqrt(variance(1));
+
+figure(2);
+
+f2 = figure(2);
+f2.Position = [800 800 400 400];
+
+plot(ROC_array(:,1),ROC_array(:,2), 'red', 'LineWidth',2);
+
+xt = 0.1;
+yt = 0.9;
+str = "Discriminability value = " + d;
+
+text(xt,yt,str)
+
+title('ROC curve')
+
+%% Second part: psychometrical experiment
+
+array = importdata('task_9_outcomes.mat');
+
+TP = 0; % the signal was presented and detected (hit)
+FN = 0; % the signal was presented but the person failed to detect it
+FP = 0; % the signal was not presented but the test person indicated to have detected (false alarm)
+TN = 0; % the signal was not presented and the test person indicated that there was no signal
+
+
+for i=1:length(array)
+    
+    %TP
+    if array(i,1) == 1 & array(i,2) == 1
+        TP = TP +1;
+    end
+    
+    %FN
+    if array(i,1) == 1 & array(i,2) == 0
+        FN = FN +1;
+    end
+    
+    %FP
+    if array(i,1) == 0 & array(i,2) == 1
+        FP = FP +1;
+    end
+    
+    %TN
+    if array(i,1) == 0 & array(i,2) == 0
+        TN = TN +1;
+    end
+    
+end
+
+stringf("
+total1 =(TP + FN);
+total2 =(FP +TN);
+
+total3 = TP +FP;
+total4 = FN +TN;
+
+Rows = ["Positive";"Negative";"Total"];
+Predicted_positive = [TP;FP;total3];
+Predicted_negative = [FN;TN; total4];
+Total = [total1;total2; total2+total1];
+
+Confusion_matrix = table(Rows,Predicted_positive,Predicted_negative,Total)
+%  uit.Position = [100 200 400 400];

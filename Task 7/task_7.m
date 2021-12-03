@@ -1,5 +1,6 @@
 %% Task 7: Learning Vector Quantization
 clc
+close all
 clear all
 
 introduction = "Task 7: Learning Vector Quantization";
@@ -47,7 +48,7 @@ dataset = [array_lvq_A; array_lvq_B];
 
 
 %% Test data
-% 
+
 % dataset = [ 5 4 2; 1 1 1;  2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2];
 % 
 % array_lvq_A = [1 1 ; 2 2; 2 1; 1 2; 3 1; 0 1];
@@ -121,7 +122,7 @@ epoch = 1;
 
 misclassified = [0 0];
 
-while epoch < 100000 
+while epoch < 1000 
     
     E = 0;
     
