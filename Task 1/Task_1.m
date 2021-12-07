@@ -65,7 +65,7 @@ for i = 1: number_columns
     end 
 
 
-    title('Array display')
+    title('Feature vectors display')
         
  end
 
@@ -76,8 +76,13 @@ for i = 1: number_columns
 
 
 %Correlation calculation with homemade functions
-   
+
+
  correlation_array = fcorrelation(array);
+ 
+ fprintf('Display of the correlation between features (row 2 and 3)\n');
+ disp(correlation_array);
+ 
 
 %Max value of correlation obtained
   

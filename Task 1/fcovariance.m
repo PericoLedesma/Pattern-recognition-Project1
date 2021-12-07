@@ -30,7 +30,8 @@ for j = 1:number_columns
     end
 end
 
-%     disp(covariance);
+fprintf('Covariance matrix:\n');
+disp(covariance);
 
 end
 
