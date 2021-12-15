@@ -3,7 +3,7 @@ matrix = importdata('task_1.mat');
 
 
 % matrix = load_file.lab1_1;
-correlation_coeff_1_2 = covariance(matrix(1:24, 1), matrix(1:24, 2)) / sqrt(covariance(matrix(1:24, 1), matrix(1:24, 1)) * covariance(matrix(1:24, 2), matrix(1:24, 2)));
+correlation_coeff_1_2 = covariance(matrix(1:24, 1), matrix(1:24, 2)) / sqrt(covariance(matrix(1:24, 1), matrix(1:24, 1)) * covariance(matrix(1:24, 1), matrix(1:24, 1)));
 correlation_coeff_1_3 = covariance(matrix(1:24, 1), matrix(1:24, 3)) / sqrt(covariance(matrix(1:24, 1), matrix(1:24, 1)) * covariance(matrix(1:24, 3), matrix(1:24, 3)));
 correlation_coeff_2_3 = covariance(matrix(1:24, 2), matrix(1:24, 3)) / sqrt(covariance(matrix(1:24, 2), matrix(1:24, 2)) * covariance(matrix(1:24, 3), matrix(1:24, 3)));
 

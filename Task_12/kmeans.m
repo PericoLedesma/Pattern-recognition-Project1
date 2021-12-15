@@ -7,7 +7,7 @@ function [clusters, mean_clusters] = kmeans(input, K, improved_flag)
     if improved_flag == false
         rand_idx = randperm(length(input),K);
         mean_clusters = input(rand_idx,:);
-
+        
 
     %k-means++ cluster setup    
     else
@@ -52,6 +52,7 @@ function [clusters, mean_clusters] = kmeans(input, K, improved_flag)
         mean_clusters = prototypes;
     end
     
+    %move the center clutsers
     while true
         distances = zeros(length(input),3);
         old_avg = mean_clusters;
