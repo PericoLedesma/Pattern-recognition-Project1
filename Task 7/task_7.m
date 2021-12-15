@@ -31,11 +31,11 @@ dataset = [array_lvq_A; array_lvq_B];
 
 
 %% Test data
-
-dataset = [ 5 4 2; 1 1 1;  2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2];
-
-array_lvq_A = [1 1 ; 2 2; 2 1; 1 2; 3 1; 0 1];
-array_lvq_B = [5 5 ; 7 7; 7 6; 7 5; 5 6];
+% 
+% dataset = [ 5 4 2; 1 1 1;  2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2];
+% 
+% array_lvq_A = [1 1 ; 2 2; 2 1; 1 2; 3 1; 0 1];
+% array_lvq_B = [5 5 ; 7 7; 7 6; 7 5; 5 6];
 
 %End of test
 
@@ -54,34 +54,27 @@ f.Position = [0 100 1200 800];
 feature_x = array_lvq_A(:,1);
 feature_y = array_lvq_A(:,2);
 
-scatter(feature_x,feature_y, '.', 'red')
+scatter(feature_x,feature_y, '.', 'red') %Category A = red
 
 hold on;
 
 feature_x2 = array_lvq_B(:,1);
 feature_y2 = array_lvq_B(:,2);
 
-scatter(feature_x2,feature_y2,'.', 'blue')
+scatter(feature_x2,feature_y2,'.', 'blue') %Category B = blue
 
 xlim([(min(dataset(:,1)) - 1) (max(dataset(:,1)) + 1)])
 ylim([(min(dataset(:,2)) - 1) (max(dataset(:,2)) + 1)])
 
 hold on;
 
-%% Weight vector with 2 points of the dataset
+%% Weight vector
 
-Number_prototypes_A = 1;
-Number_prototypes_B = 1;
+weight_A = [2.12 3.95; 7.4 6]; % Label A prototype, point [x y]
+weight_B = [5 5.4]; % Label B prototype
 
 
-weight_A = [1 2; 3 4]; % Label A prototype, point [x y]
-weight_B = [5 6; 7 8]; % Label B prototype
-
-% weight = [2.7; 5.9]; % Label A prototype
-% weight2 = [4.952; 2.7]; % Label B prototype
-
-% weight = [2.7; 5.9]; % Label A prototype
-% weight2 = [4.952; 2.7]; % Label B prototype
+%Third colums is the category
 
 a = length(weight_A(:,1));
 category_A = zeros(a,1) + 1;
@@ -92,20 +85,28 @@ category_B = zeros(a,1) + 2; %Category b = 2
 weight_B = [weight_B category_B];
 
 
-weight = [weight_A ; weight_B] %Thrid colums is the category
+weight = [weight_A ; weight_B]
+
+%Weight history for mapping
+
+weight_history_A = [weight_A(1,1) weight_A(1,2)];
+
+if length(weight_A(:,1)) > 1
+    a = length(weight_A(:,1));
+    for i = 2:a
+        weight_history_A = [weight_history_A; weight_A(i,1) weight_A(i,1)];
+    end
+end
 
 
- weight_history_A = [weight_A(1,1) weight_A(1,2)];
+weight_history_B = [weight_B(1,1) weight_B(1,2)];
 
-for i = 2:length(weight_A(:,1))
-    weight_history_A = [weight_history_A; weight_A(i,1) weight_A(i,1)];
- end
-
- weight_history_B = [weight_B(1,1) weight_B(1,2)];
-
-for i = 2:length(weight_A(:,1))
-    weight_history_B = [weight_history_B; weight_B(i,1) weight_B(i,1)];
- end
+if length(weight_B(:,1)) > 1
+    a = length(weight_B(:,1));
+    for i = 2:a
+        weight_history_B = [weight_history_B; weight_B(i,1) weight_B(i,1)];
+    end
+end
 
 
 
@@ -115,7 +116,7 @@ for i = 1:length(weight_A(:,1))
     
     feature_display_X = weight_A(i,1);
     feature_display_Y = weight_A(i,1);
-    scatter(feature_display_X,feature_display_Y,'p','red');
+    scatter(feature_display_X,feature_display_Y,60,'*','red');
     
     hold on;
 end
@@ -124,7 +125,7 @@ for i = 1:length(weight_B(:,1))
     
     feature_display_X = weight_B(i,1);
     feature_display_Y = weight_B(i,1);
-    scatter(feature_display_X,feature_display_Y,'p','blue');
+    scatter(feature_display_X,feature_display_Y,60,'*','blue');
     
     hold on;
 end
@@ -134,33 +135,32 @@ end
 
 step = 0.01;
 
-row = 1;
+epoch_limit = 50000;
 
-epoch_limit = 1000;
 
-E_threshold = 50;
 
 
 %% Loop with the calculations
 
 epoch = 1;
 
-E = 200;
+E = 0; %number_rows_dataset;
 
 misclassified = [0 0];
+threshold_array = [0 0];
 
 fprintf('Inicialization of the iterations');
 
-a = length(weight_A(:,1))+length(weight_B(:,1))
+a = length(weight_A(:,1))+length(weight_B(:,1));
 
 Distance = zeros (1,a);
 
+strop_criteria = 2;
 
-while  E > E_threshold
-    
-    E = 0;
-    
-    for row = 3:number_rows_dataset
+while  strop_criteria > 0.1
+
+% while epoch < epoch_limit
+    for row = 1:number_rows_dataset
         
         %% Euclidean distance from weight points to the select point
         
@@ -170,57 +170,71 @@ while  E > E_threshold
         
         [val, idx] = min(Distance);
         
-        % Distance_1 < Distance_2
+%         fprintf('\nPoint: %f  %f',dataset(row,1),dataset(row,2))
+%         fprintf('\nWeights: %f  %f',weight(idx,1),weight(idx,2))
         
+
         if dataset(row,3) == 1
             if weight(idx,3) == 1
-                
-                weight(idx,1) = weight(idx,1) - step * (dataset(row,1) - weight(idx,1));
-                weight(idx,2) = weight(idx,2) - step * (dataset(row,2) - weight(idx,2));
-                
-                weight_history_A = [weight_history_A; weight(idx,1) weight(idx,2)];
-                
-              
-            end
-            
-            if weight(idx,3) == 2
                 
                 weight(idx,1) = weight(idx,1) + step * (dataset(row,1) - weight(idx,1));
                 weight(idx,2) = weight(idx,2) + step * (dataset(row,2) - weight(idx,2));
                 
-                E = E +1;
+                weight_history_A = [weight_history_A; weight(idx,1) weight(idx,2)];
+                
+                
+            end
+            
+            if weight(idx,3) == 2
+                
+                weight(idx,1) = weight(idx,1) - step * (dataset(row,1) - weight(idx,1));
+                weight(idx,2) = weight(idx,2) - step * (dataset(row,2) - weight(idx,2));
                 
                 weight_history_B = [weight_history_B; weight(idx,1) weight(idx,2)];
+                E = E +1;
             end
             
         elseif  dataset(row,3) == 2
             if weight(idx,3) == 2
                 
-                weight(idx,1) = weight(idx,1) - step * (dataset(row,1) - weight(idx,1));
-                weight(idx,2) = weight(idx,2) - step * (dataset(row,2) - weight(idx,2));
+                weight(idx,1) = weight(idx,1) + step * (dataset(row,1) - weight(idx,1));
+                weight(idx,2) = weight(idx,2) + step * (dataset(row,2) - weight(idx,2));
                 
                 weight_history_B = [weight_history_B; weight(idx,1) weight(idx,2)];
+                
                 
             end
             if weight(idx,3) == 1
                 
-                weight(idx,1) = weight(idx,1) + step * (dataset(row,1) - weight(idx,1));
-                weight(idx,2) = weight(idx,2) + step * (dataset(row,2) - weight(idx,2));
-                
-                E = E +1;
+                weight(idx,1) = weight(idx,1) - step * (dataset(row,1) - weight(idx,1));
+                weight(idx,2) = weight(idx,2) - step * (dataset(row,2) - weight(idx,2));
                 
                 weight_history_A = [weight_history_A; weight(idx,1) weight(idx,2)];
-                
-            end                    
+                E = E +1;
+            end
         end
+        
+        %         fprintf('\nWeights after: %f  %f',weight(idx,1),weight(idx,2))
+        
+        threshold = E/number_rows_dataset;
         
         misclassified = [misclassified; epoch E];
+        
+        threshold_array = [threshold_array; epoch threshold];
+        
         epoch = epoch + 1
         
-        if epoch >= epoch_limit
-            break
-        end
+        strop_criteria = threshold_array (epoch,2)/ threshold_array (epoch -1,2);
+        strop_criteria = strop_criteria - 1;
     end
+    
+    if epoch >= epoch_limit
+        break
+    end
+    
+           
+    fprintf('\nError: %f',threshold);
+    
 end
 
 fprintf('\nFinish iterations\n');
@@ -232,26 +246,25 @@ disp(weight);
 
 feature_x3 = weight_history_A(:,1);
 feature_y3 = weight_history_A(:,2);
-scatter(feature_x3,feature_y3,'x', 'blue');
+scatter(feature_x3,feature_y3,10,'x', 'red');
 
 hold on;
 
 feature_x3 = weight_history_B(:,1);
 feature_y3 = weight_history_B(:,2);
-scatter(feature_x3,feature_y3,'.', 'blue');
+scatter(feature_x3,feature_y3,10,'x', 'blue');
 
 hold on;
 
 
 %% Displayed final weights
 
-
 for i = 1:length(weight(:,1))
-   
-        
+    
+    
     feature_display_X = weight(i,1);
     feature_display_Y = weight(i,2);
-    scatter(feature_display_X,feature_display_Y,'p','green');
+    scatter(feature_display_X,feature_display_Y,70,'p','magenta');
     
     hold on;
 end
@@ -260,72 +273,9 @@ end
 %% Misclasified points in each epoch
 
 figure('Name','Misclasified points');
-scatter(misclassified(:,1),misclassified(:,2), 10,'*', 'magenta');
+
+feature_display_X = misclassified(:,1);
+feature_display_Y = misclassified(:,2);
+scatter(feature_display_X,feature_display_Y,10,'*', 'magenta');
 
 hold on;
-
-
-
-
-
-
-
-%                %Vector
-%                weight_history_1 = [weight_history_1; weight(1,1)  weight(2,1)];
-%
-%                for i = 1:length(weight_A(:,1))
-%                    weight_history.A(idx,1) = weight(idx,1);
-%                    j = idx + 1;
-%                    weight_history.A(j,1) = weight(idx,2) ;
-%
-%                end
-
-
-
-
-
-%
-%
-%
-%
-%
-%
-%         if Distance_1 < Distance_2
-%             if dataset(row,3) == 1
-%
-%                 weight(1,1) = weight(1,1) + step * (dataset(row,1) - weight(1,1));
-%                 weight(2,1) = weight(2,1) + step * (dataset(row,2) - weight(2,1));
-%
-%                 %Vector
-%                 weight_history_1 = [weight_history_1; weight(1,1)  weight(2,1)];
-%
-%             elseif  dataset(row,3) == 2
-%
-%                 weight(1,1) = weight(1,1) - step * (dataset(row,1) - weight(1,1));
-%                 weight(2,1) = weight(2,1) - step * (dataset(row,2) - weight(2,1));
-%
-%                 weight_history_1 = [weight_history_1; weight(1,1)  weight(2,1)];
-%
-%                 E = E + 1;
-%             end
-%         % Distance_1 < Distance_2
-%         elseif Distance_1 > Distance_2
-%             if dataset(row,3) == 2
-%
-%                 weight(1,2) = weight(1,2) + step * (dataset(row,1) - weight(1,2));
-%                 weight(2,2) = weight(2,2) + step * (dataset(row,2) - weight(2,2));
-%
-%
-%                 weight_history_2 = [weight_history_2; weight(1,2)  weight(2,2)];
-%
-%             elseif dataset(row,3) == 1
-%
-%                 weight(1,2) = weight(1,2) - step * (dataset(row,1) - weight(1,2));
-%                 weight(2,2) = weight(2,2) - step * (dataset(row,2) - weight(2,2));
-%
-%                 weight_history_2 = [weight_history_2; weight(1,2)  weight(2,2)];
-%
-%                 E = E + 1;
-%             end
-%         end
-%
