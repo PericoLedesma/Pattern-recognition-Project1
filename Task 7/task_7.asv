@@ -32,10 +32,10 @@ dataset = [array_lvq_A; array_lvq_B];
 
 %% Test data
 
-dataset = [ 5 4 2; 1 1 1;  2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2];
-
-array_lvq_A = [1 1 ; 2 2; 2 1; 1 2; 3 1; 0 1];
-array_lvq_B = [5 5 ; 7 7; 7 6; 7 5; 5 6];
+% dataset = [ 5 4 2; 1 1 1;  2 1 1; 1 2 1; 3 1 1; 0 1 1; 5 5 2; 7 7 2; 7 6 2; 7 5 2; 5 6 2];
+%
+% array_lvq_A = [1 1 ; 2 2; 2 1; 1 2; 3 1; 0 1];
+% array_lvq_B = [5 5 ; 7 7; 7 6; 7 5; 5 6];
 
 %End of test
 
@@ -70,8 +70,8 @@ hold on;
 
 %% Weight vector with 2 points of the dataset
 
-Number_prototypes_A = 1;
-Number_prototypes_B = 1;
+Number_prototypes_A = 2;
+Number_prototypes_B = 2;
 
 
 weight_A = [1 2; 3 4]; % Label A prototype, point [x y]
@@ -95,13 +95,13 @@ weight_B = [weight_B category_B];
 weight = [weight_A ; weight_B] %Thrid colums is the category
 
 
- weight_history_A = [weight_A(1,1) weight_A(1,2)];
+ weight_history_A = [weight_A(1,1) weight_A(1,2)]
 
 for i = 2:length(weight_A(:,1))
     weight_history_A = [weight_history_A; weight_A(i,1) weight_A(i,1)];
  end
 
- weight_history_B = [weight_B(1,1) weight_B(1,2)];
+ weight_history_B = [weight_B(1,1) weight_B(1,2)]
 
 for i = 2:length(weight_A(:,1))
     weight_history_B = [weight_history_B; weight_B(i,1) weight_B(i,1)];
@@ -136,7 +136,7 @@ step = 0.01;
 
 row = 1;
 
-epoch_limit = 1000;
+epoch_limit = 1500;
 
 E_threshold = 50;
 
@@ -151,9 +151,9 @@ misclassified = [0 0];
 
 fprintf('Inicialization of the iterations');
 
-a = length(weight_A(:,1))+length(weight_B(:,1))
+a = length(weight_A)+length(weight_B);
 
-Distance = zeros (1,a);
+Distance = zeros (1,a)
 
 
 while  E > E_threshold
@@ -168,7 +168,7 @@ while  E > E_threshold
             Distance(i) = (weight(i,1)- dataset(row,1))^2 + (weight(i,2)- dataset(row,2))^2;
         end
         
-        [val, idx] = min(Distance);
+        [val, idx] = min(Distance)
         
         % Distance_1 < Distance_2
         
@@ -243,18 +243,41 @@ scatter(feature_x3,feature_y3,'.', 'blue');
 hold on;
 
 
-%% Displayed final weights
+% Displayed initial weights
 
 
 for i = 1:length(weight(:,1))
-   
+    if weight(i,3) == 1
         
-    feature_display_X = weight(i,1);
-    feature_display_Y = weight(i,2);
-    scatter(feature_display_X,feature_display_Y,'p','green');
+    feature_display_X = weight_history_A(i,1);
+    feature_display_Y = weight_history_A(i,1);
+    scatter(feature_display_X,feature_display_Y,'p','red');
     
     hold on;
 end
+
+for i = 1:length(weight_history_B(:,1))
+    
+    feature_display_X = weight_history_B(i,1);
+    feature_display_Y = weight_history_B(i,1);
+    scatter(feature_display_X,feature_display_Y,'p','blue');
+    
+    hold on;
+end
+
+
+
+%% Weight vector display
+
+feature_x3 = weight(1,1);
+feature_y3 = weight(2,1);
+scatter(feature_x3,feature_y3,'*', 'magenta');
+
+feature_x3 = weight(1,2);
+feature_y3 = weight(2,2);
+scatter(feature_x3,feature_y3,'*', 'magenta');
+
+hold on;
 
 
 %% Misclasified points in each epoch

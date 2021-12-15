@@ -5,7 +5,7 @@ close all
 
 % Firts element Height, Second element Age, Third element Weight(kg)
 
-%Load the data file provided
+%Load the data file provided 
 
 array = importdata('task_1.mat');
 
@@ -80,7 +80,7 @@ for i = 1: number_columns
 
  correlation_array = fcorrelation(array);
  
- fprintf('Display of the correlation between features (row 2 and 3)\n');
+ fprintf('Display of the correlation between features (rows 2 and 3 are the feaures)\n');
  disp(correlation_array);
  
 
