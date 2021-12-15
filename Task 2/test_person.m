@@ -3,11 +3,11 @@ ID = 0;
 test = load('testperson.mat');
 test_iris = test.iriscode;
 for i = 1:20
-    p = person(i).iriscode;
+    p = load(sprintf('person%02d.mat', i)).iriscode;
     for r = 1:20
         counter = 0;
         HD = 0;
-        for j = 1:30;
+        for j = 1:30
             if(test_iris(j)==2)
                 counter = counter + 1;
             else
@@ -23,4 +23,6 @@ for i = 1:20
 end
 minHD
 ID
+
+
 
