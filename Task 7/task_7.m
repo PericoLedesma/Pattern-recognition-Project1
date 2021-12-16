@@ -70,9 +70,24 @@ hold on;
 
 %% Weight vector
 
+%Case a
+
+weight_A = [5.18 4.531]; % Label A prototype, point [x y]
+weight_B = [5 5.4]; % Label B prototype
+
+%Case b
+
+weight_A = [5.18 4.531]; % Label A prototype, point [x y]
+weight_B = [4.97397 6.2347; 5.86778 4.11038]; % Label B prototype
+
+% Case c
 weight_A = [2.12 3.95; 7.4 6]; % Label A prototype, point [x y]
 weight_B = [5 5.4]; % Label B prototype
 
+%Case d
+
+weight_A = [2.12 3.95; 7.4 6]; % Label A prototype, point [x y]
+weight_B = [5 5.4; 4.973 6.2347]; % Label B prototype
 
 %Third colums is the category
 
@@ -116,7 +131,7 @@ for i = 1:length(weight_A(:,1))
     
     feature_display_X = weight_A(i,1);
     feature_display_Y = weight_A(i,1);
-    scatter(feature_display_X,feature_display_Y,60,'*','red');
+    scatter(feature_display_X,feature_display_Y,100,'*','red');
     
     hold on;
 end
@@ -125,7 +140,7 @@ for i = 1:length(weight_B(:,1))
     
     feature_display_X = weight_B(i,1);
     feature_display_Y = weight_B(i,1);
-    scatter(feature_display_X,feature_display_Y,60,'*','blue');
+    scatter(feature_display_X,feature_display_Y,100,'*','blue');
     
     hold on;
 end
@@ -137,6 +152,7 @@ step = 0.01;
 
 epoch_limit = 50000;
 
+threshold = 25;
 
 
 
@@ -144,9 +160,10 @@ epoch_limit = 50000;
 
 epoch = 1;
 
-E = 0; %number_rows_dataset;
+E = number_rows_dataset; %number_rows_dataset;
 
 misclassified = [0 0];
+
 threshold_array = [0 0];
 
 fprintf('Inicialization of the iterations');
@@ -157,9 +174,10 @@ Distance = zeros (1,a);
 
 strop_criteria = 2;
 
-while  strop_criteria > 0.1
-
-% while epoch < epoch_limit
+while E > threshold
+    
+    
+    E = 0;
     for row = 1:number_rows_dataset
         
         %% Euclidean distance from weight points to the select point
@@ -213,6 +231,7 @@ while  strop_criteria > 0.1
                 E = E +1;
             end
         end
+    end
         
         %         fprintf('\nWeights after: %f  %f',weight(idx,1),weight(idx,2))
         
@@ -224,16 +243,19 @@ while  strop_criteria > 0.1
         
         epoch = epoch + 1
         
-        strop_criteria = threshold_array (epoch,2)/ threshold_array (epoch -1,2);
+        strop_criteria = threshold_array (epoch,2)/ threshold_array (epoch - 1,2);
         strop_criteria = strop_criteria - 1;
-    end
-    
-    if epoch >= epoch_limit
-        break
-    end
-    
-           
-    fprintf('\nError: %f',threshold);
+        
+        if  E < threshold
+            if strop_criteria < 0.03
+                fprintf('Stop because no variation');
+                break
+            end
+        end
+        
+        
+        fprintf('\nError: %f',threshold);
+        
     
 end
 
@@ -264,7 +286,7 @@ for i = 1:length(weight(:,1))
     
     feature_display_X = weight(i,1);
     feature_display_Y = weight(i,2);
-    scatter(feature_display_X,feature_display_Y,70,'p','magenta');
+    scatter(feature_display_X,feature_display_Y,80,'filled','black');
     
     hold on;
 end
@@ -274,8 +296,8 @@ end
 
 figure('Name','Misclasified points');
 
-feature_display_X = misclassified(:,1);
-feature_display_Y = misclassified(:,2);
+feature_display_X = threshold_array(:,1);
+feature_display_Y = threshold_array(:,2);
 scatter(feature_display_X,feature_display_Y,10,'*', 'magenta');
 
 hold on;
