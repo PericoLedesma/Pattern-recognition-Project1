@@ -31,5 +31,6 @@ for i = 1: number_columns
     %fprintf('The correlation between the column %d and column %d is: %f\n',column1,column2, correlation);
 end
 
+correlation_array(:,1) = [];
 
 end

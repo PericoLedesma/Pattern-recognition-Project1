@@ -29,8 +29,8 @@ email_text2 = upper(email_text2);
 %% We have to eliminate dots, exclamation and interrogation signs of the
 %email text
 
-email_text1 = erase(email_text1 ,[".", "!", "!"])
-email_text2 = erase(email_text2 ,[".", "!", "!"])
+email_text1 = erase(email_text1 ,[".", "!", "!"]);
+email_text2 = erase(email_text2 ,[".", "!", "!"]);
 
 
 %% Text 1: Function to create a structure where each word has his probabilities

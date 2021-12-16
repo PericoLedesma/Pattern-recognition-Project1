@@ -191,7 +191,7 @@ while  strop_criteria > 0.1
                 weight(idx,2) = weight(idx,2) - step * (dataset(row,2) - weight(idx,2));
                 
                 weight_history_B = [weight_history_B; weight(idx,1) weight(idx,2)];
-                E = E +1;
+                E = E + 1;
             end
             
         elseif  dataset(row,3) == 2
@@ -210,7 +210,7 @@ while  strop_criteria > 0.1
                 weight(idx,2) = weight(idx,2) - step * (dataset(row,2) - weight(idx,2));
                 
                 weight_history_A = [weight_history_A; weight(idx,1) weight(idx,2)];
-                E = E +1;
+                E = E + 1;
             end
         end
         
