@@ -87,7 +87,8 @@ weight_B = [weight_B category_B];
 
 weight = [weight_A ; weight_B]
 
-%Weight history for mapping
+%Weight history for mapping %%%%% THIS Weight history A and B are stored
+%already in the weight A and B before loop.
 
 weight_history_A = [weight_A(1,1) weight_A(1,2)];
 
