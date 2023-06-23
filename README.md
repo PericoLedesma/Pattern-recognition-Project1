@@ -3,6 +3,21 @@
 
 # Projects
 
+Project 1
+* Task 1: Pairwise correlation coeﬀicients
+* Task 2: Hamming distance
+* Task 3: Covariance matrix
+* Task 4: 2D Gaussian
+* Task 5: Naive Bayesian rule
+* Task 6: Decision Tree
+* Task 7: Learning Vector Quantization
+* Task 8: Cross-Validation
+* Task 9: ROC
+* Task 10: Transforms
+* Task 11: K-Nearest Neighbor
+* Task 12: K-means clustering
+
+[Project 2: Creating Pattern Recognition Pipelines using Traditional Machine Learning methods](https://github.com/PericoLedesma/Pattern-recognition-Project2)
 
 ## Description 
 
