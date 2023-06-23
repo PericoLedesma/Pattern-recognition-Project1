@@ -1,3 +1,4 @@
+
 # Pattern Recognition (for AI)
 
 # Projects
